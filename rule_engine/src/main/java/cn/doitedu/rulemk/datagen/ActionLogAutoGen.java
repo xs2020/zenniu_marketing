@@ -60,7 +60,7 @@ import java.util.Properties;
 public class ActionLogAutoGen {
     public static void main(String[] args) throws InterruptedException {
         Properties props = new Properties();
-        props.setProperty("bootstrap.servers", "192.168.56.101:9092,192.168.56.101:9092,192.168.56.101:9092");
+        props.setProperty("bootstrap.servers", "192.168.56.105:9092,192.168.56.106:9092,192.168.56.107:9092");
         props.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer");
         props.put("value.serializer", "org.apache.kafka.common.serialization.StringSerializer");
         // 创建多个线程，并行执行
@@ -100,7 +100,7 @@ public class ActionLogAutoGen {
         // 生成的账号形如： 004078
         String account = StringUtils.leftPad(RandomUtils.nextInt(1, 20) + "", 6, "0");
         logBean.setAccount(account);
-        logBean.setAppId("cn.doitedu.yinew");
+        logBean.setAppId("cn.doitedu.zennew");
         logBean.setAppVersion("2.5");
         logBean.setCarrier("中国移动");
         // deviceid直接用account
