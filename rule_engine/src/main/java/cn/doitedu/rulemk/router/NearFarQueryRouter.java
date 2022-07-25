@@ -109,7 +109,6 @@ public class NearFarQueryRouter {
                             int countInState2 = stateQueryIml.queryEventSequence(trimedEventSequence, segmentPoint, actionSequenceCondition.getTimeEnd());
                             if(countInClik+countInState2 < eventSequence.size()) return false;
                         }
-
                 }
 
             }
