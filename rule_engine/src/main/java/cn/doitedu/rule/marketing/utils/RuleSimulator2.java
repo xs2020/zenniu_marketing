@@ -1,8 +1,6 @@
 package cn.doitedu.rule.marketing.utils;
 
 
-import cn.doitedu.rule.engine.beans.EventSequenceParam;
-import cn.doitedu.rule.engine.beans.RuleConditions;
 import cn.doitedu.rule.marketing.beans.EventCombinationCondition;
 import cn.doitedu.rule.marketing.beans.EventCondition;
 import cn.doitedu.rule.marketing.beans.MarketingRule;
@@ -27,7 +25,7 @@ public class RuleSimulator2 {
         HashMap<String, String> map1 = new HashMap<>();
         map1.put("p2","v1");
         EventCondition triggerEvent = new EventCondition("K",map1,-1,Long.MAX_VALUE,1,999);
-        rule.setTriggerEvent(triggerEvent);
+        rule.setTriggerEventCondition(triggerEvent);
 
         //2.画像条件
         HashMap<String, String> map2 = new HashMap<>();

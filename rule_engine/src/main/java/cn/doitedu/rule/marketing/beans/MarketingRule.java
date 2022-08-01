@@ -14,7 +14,7 @@ public class MarketingRule {
 
     private String ruleId;
 
-    private EventCondition triggerEvent;
+    private EventCondition triggerEventCondition;
 
     private Map<String,String> userProfileCondition;
 
