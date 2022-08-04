@@ -6,6 +6,8 @@ import cn.doitedu.rule.marketing.beans.RuleMatchResult;
 import cn.doitedu.rule.marketing.functions.JasonToEventBean;
 import cn.doitedu.rule.marketing.functions.KafkaSourceBuilder;
 import cn.doitedu.rule.marketing.functions.RuleMatchKeyedProcessFunction;
+import org.apache.flink.api.common.eventtime.SerializableTimestampAssigner;
+import org.apache.flink.api.common.eventtime.WatermarkStrategy;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.datastream.DataStreamSource;
@@ -13,6 +15,8 @@ import org.apache.flink.streaming.api.datastream.KeyedStream;
 import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer;
+
+import java.time.Duration;
 
 /*
    规则：
@@ -33,6 +37,15 @@ public class Main {
 
         DataStream<EventBean> dsBean = dss.map(new JasonToEventBean()).filter(e -> e != null);
         //dsBean.print();
+
+        WatermarkStrategy<EventBean> waterMark = WatermarkStrategy.<EventBean>forBoundedOutOfOrderness(Duration.ofMillis(0)).withTimestampAssigner(new SerializableTimestampAssigner<EventBean>() {
+            @Override
+            public long extractTimestamp(EventBean eventBean, long l) {
+                return eventBean.getTimeStamp();
+            }
+        });
+
+        dsBean.assignTimestampsAndWatermarks(waterMark);
 
         KeyedStream<EventBean, String> keyedDs = dsBean.keyBy(bean -> bean.getDeviceId());
         DataStream<RuleMatchResult> matchResultDs = keyedDs.process(new RuleMatchKeyedProcessFunction());

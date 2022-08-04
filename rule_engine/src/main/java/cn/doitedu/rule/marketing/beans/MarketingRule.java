@@ -20,5 +20,7 @@ public class MarketingRule {
 
     private List<EventCombinationCondition>  eventCombinationConditionList;
 
-    private boolean isOnTimer;
+    private boolean onTimer;
+
+    private List<TimerCondition> timerConditionList;
 }

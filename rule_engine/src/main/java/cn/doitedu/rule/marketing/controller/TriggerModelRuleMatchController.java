@@ -1,9 +1,6 @@
 package cn.doitedu.rule.marketing.controller;
 
-import cn.doitedu.rule.marketing.beans.EventBean;
-import cn.doitedu.rule.marketing.beans.EventCombinationCondition;
-import cn.doitedu.rule.marketing.beans.EventCondition;
-import cn.doitedu.rule.marketing.beans.MarketingRule;
+import cn.doitedu.rule.marketing.beans.*;
 import cn.doitedu.rule.marketing.service.TriggerModelRuleMatchServiceImpl;
 import cn.doitedu.rule.marketing.utils.EventUtil;
 import org.apache.flink.api.common.state.ListState;
@@ -44,6 +41,24 @@ public class TriggerModelRuleMatchController {
                 if(!b) return false;
             }
         }
+        return true;
+    }
+
+    public boolean ruleTimerIsMatch(TimerCondition timerCondition,String deviceId,long queryTimeStart, long queryTimeEnd) throws Exception {
+        List<EventCombinationCondition> eventCombinationConditionList = timerCondition.getEventCombinationConditionList();
+        for (EventCombinationCondition eventCombinationCondition : eventCombinationConditionList) {
+            eventCombinationCondition.setTimeRangeStart(queryTimeStart);
+            eventCombinationCondition.setTimeRangeEnd(queryTimeEnd);
+
+            EventBean eventBean = new EventBean();
+            eventBean.setDeviceId(deviceId);
+            //设置on timer被触发的时间点作为当前时间求分界点
+            eventBean.setTimeStamp(queryTimeEnd);
+            boolean b = triggerModelRuleMatchService.matchEventCombinationCondition(eventCombinationCondition, eventBean);
+
+            if(!b) return false;
+        }
+
         return true;
     }
 }
